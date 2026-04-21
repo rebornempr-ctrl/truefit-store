@@ -3,8 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, X, Menu } from 'lucide-react'
 import { useCart } from '../context/CartContext'
+import DarkModeToggle from './DarkModeToggle'
 
-export default function Navbar() {
+export default function Navbar({ isDark, onToggleDark }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { items } = useCart()
@@ -30,18 +31,30 @@ export default function Navbar() {
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
           padding: '0.8rem 2rem',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          background: scrolled ? 'rgba(245,240,232,0.95)' : 'transparent',
+          background: scrolled
+            ? isDark ? 'rgba(17,17,17,0.95)' : 'rgba(245,240,232,0.95)'
+            : 'transparent',
           backdropFilter: scrolled ? 'blur(12px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(0,0,0,0.08)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(128,128,128,0.12)' : 'none',
           transition: 'all 0.4s ease'
         }}
       >
-        <Link to="/" style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', letterSpacing: '0.15em', color: 'var(--black)' }}>
+        {/* Logo */}
+        <Link to="/" style={{
+          fontFamily: 'var(--font-display)', fontSize: '1.6rem',
+          letterSpacing: '0.15em', color: 'var(--black)'
+        }}>
           TRUE FIT
         </Link>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <Link to="/cart" style={{ position: 'relative' }} onClick={() => {}}>
+        {/* Right side icons */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
+
+          {/* Dark mode toggle */}
+          <DarkModeToggle isDark={isDark} onToggle={onToggleDark} />
+
+          {/* Cart */}
+          <Link to="/cart" style={{ position: 'relative', color: 'var(--black)' }}>
             <ShoppingBag size={22} strokeWidth={1.5} />
             {totalItems > 0 && (
               <motion.span
@@ -51,20 +64,26 @@ export default function Navbar() {
                   position: 'absolute', top: '-8px', right: '-8px',
                   background: 'var(--red)', color: 'white',
                   borderRadius: '50%', width: '18px', height: '18px',
-                  fontSize: '11px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontWeight: 600
+                  fontSize: '11px', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', fontWeight: 600
                 }}
               >
                 {totalItems}
               </motion.span>
             )}
           </Link>
-          <button onClick={() => setOpen(!open)} style={{ display: 'flex', alignItems: 'center' }}>
+
+          {/* Hamburger */}
+          <button
+            onClick={() => setOpen(!open)}
+            style={{ display: 'flex', alignItems: 'center', color: 'var(--black)' }}
+          >
             {open ? <X size={22} strokeWidth={1.5} /> : <Menu size={22} strokeWidth={1.5} />}
           </button>
         </div>
       </motion.nav>
 
+      {/* Full screen menu */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -111,11 +130,30 @@ export default function Navbar() {
               </motion.div>
             ))}
 
+            {/* Dark mode toggle inside menu too */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.35 }}
+              style={{
+                marginTop: '2rem',
+                display: 'flex', alignItems: 'center', gap: '1rem'
+              }}
+            >
+              <span style={{
+                fontFamily: 'var(--font-body)', fontSize: '0.7rem',
+                letterSpacing: '0.2em', color: 'var(--gray)'
+              }}>
+                {isDark ? 'DARK MODE' : 'LIGHT MODE'}
+              </span>
+              <DarkModeToggle isDark={isDark} onToggle={onToggleDark} />
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              style={{ marginTop: '3rem', display: 'flex', gap: '1.5rem' }}
+              style={{ marginTop: '2rem', display: 'flex', gap: '1.5rem' }}
             >
               <a href="https://www.instagram.com/true.fit90" target="_blank" rel="noreferrer"
                 style={{ color: 'var(--gray)', fontFamily: 'var(--font-body)', fontSize: '0.8rem', letterSpacing: '0.15em' }}>
