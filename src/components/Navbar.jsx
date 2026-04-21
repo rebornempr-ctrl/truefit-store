@@ -28,7 +28,7 @@ export default function Navbar() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000,
-          padding: '1.2rem 2rem',
+          padding: '1rem 2rem',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           background: scrolled ? 'rgba(245,240,232,0.95)' : 'transparent',
           backdropFilter: scrolled ? 'blur(12px)' : 'none',
@@ -41,7 +41,7 @@ export default function Navbar() {
         </Link>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <Link to="/shop" style={{ position: 'relative' }} onClick={() => {}}>
+          <Link to="/cart" style={{ position: 'relative' }} onClick={() => {}}>
             <ShoppingBag size={22} strokeWidth={1.5} />
             {totalItems > 0 && (
               <motion.span
